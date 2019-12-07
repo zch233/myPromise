@@ -12,11 +12,16 @@ describe('myPromise', () => {
     assert.isFunction(myPromise)
   })
   it('只允许接受一个函数当参数', () => {
-    const promise = new myPromise(() => {})
-    assert(promise)
+    assert.doesNotThrow(() => {
+      new myPromise(() => {})
+    })
     assert.throw(() => {
       // @ts-ignore
       new myPromise(1)
+    })
+    assert.throw(() => {
+      // @ts-ignore
+      new myPromise()
     })
   })
   it('接受函数并会立即调用这个函数', () => {
@@ -24,14 +29,21 @@ describe('myPromise', () => {
     new myPromise(called)
     assert(called)
   })
-  it('拥有一个then方法', () => {
+  it('拥有一个 then 方法', () => {
     const promise = new myPromise(() => {})
     assert.isFunction(promise.then)
   })
-  it('接受的函数有两个参数，分别是resolve和reject', () => {
+  it('接受的函数有两个参数，分别是 resolve 和 reject', () => {
     new myPromise((resolve, reject) => {
       assert.isFunction(resolve)
       assert.isFunction(reject)
     })
+  })
+  it('执行 resolve 以后会执行 then 里的人success 函数', () => {
+    const called = sinon.fake()
+    const promise = new myPromise((resolve) => {
+      resolve()
+    })
+    promise.then(called)
   })
 })
