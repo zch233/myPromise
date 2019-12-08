@@ -1,17 +1,7 @@
 export default function myPromise(fn: Function) {
-  if (!isFunction(fn)) throw Error('必须传入函数')
-  this.resolve = () => {
-    setTimeout(() => {
-      this.events.map((fn: [Function, Function]) => fn[0].call(undefined))
-    })
-  }
-  this.reject = () => {
-    setTimeout(() => {
-      this.events.map((fn: [Function, Function]) => fn[1].call(undefined))
-    })
-  }
+  if (!isFunction(fn)) throw Error('Promise resolver undefined is not a function')
   this.events = []
-  fn.call(undefined, this.resolve, this.reject)
+  fn.call(undefined, this.resolve.bind(this), this.reject.bind(this))
 }
 
 function isFunction(fn:any) {
@@ -19,6 +9,18 @@ function isFunction(fn:any) {
   return true
 }
 
-myPromise.prototype.then = (success: Function, fail: Function) => {
+myPromise.prototype.then = function (success: Function, fail: Function) {
   this.events.push([success, fail])
+}
+
+myPromise.prototype.resolve = function () {
+  setTimeout(() => {
+    this.events.map((fn: [Function, Function]) => fn[0].call(undefined))
+  })
+}
+
+myPromise.prototype.reject = function () {
+  setTimeout(() => {
+    this.events.map((fn: [Function, Function]) => fn[1].call(undefined))
+  })
 }

@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import sinon from 'sinon'
+import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import myPromise from '../src'
 
@@ -39,12 +39,15 @@ describe('myPromise', () => {
       assert.isFunction(reject)
     })
   })
-  it('执行 resolve 以后会执行 then 里的人success 函数', () => {
+  it('执行 resolve 以后会执行 then 里的 success 函数', (done) => {
     const called = sinon.fake()
     const promise = new myPromise((resolve: Function) => {
       resolve()
-      assert(called)
+      setTimeout(() => {
+        assert(called)
+        done()
+      })
     })
-    promise.then()
+    promise.then(called)
   })
 })
