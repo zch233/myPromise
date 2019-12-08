@@ -26,7 +26,7 @@ describe('myPromise', () => {
   it('接受函数并会立即调用这个函数', () => {
     const called = sinon.fake()
     new myPromise(called)
-    assert(called)
+    assert(called.called)
   })
   it('拥有一个 then 方法', () => {
     const promise = new myPromise(() => {})
@@ -43,7 +43,7 @@ describe('myPromise', () => {
     const promise = new myPromise((resolve: Function) => {
       resolve()
       setTimeout(() => {
-        assert(called)
+        assert(called.called)
         done()
       })
     })
@@ -54,7 +54,7 @@ describe('myPromise', () => {
     const promise = new myPromise((resolve: Function, reject: Function) => {
       reject()
       setTimeout(() => {
-        assert(called)
+        assert(called.called)
         done()
       })
     })
@@ -82,7 +82,7 @@ describe('myPromise', () => {
     })
     promise.then(null, called)
   })
-  xit('一个 promise 有且只有一个状态（pending，fulfilled，rejected 其中之一）', () => {})
+  it('一个 promise 有且只有一个状态（pending，fulfilled，rejected 其中之一）', () => {})
   describe('2.2.1 onFulfilled 和 onRejected 都是可选参数', () => {
     it('2.2.1.1 如果 onFulfilled 不是函数，它会被忽略', () => {
       const promise = new myPromise((resolve) => resolve())
@@ -110,15 +110,65 @@ describe('myPromise', () => {
       })
       promise.then(called)
     })
+    it('2.2.2.2 它一定是在 promise 是 fulfilled 状态后调用', (done) => {
+      const called = sinon.fake()
+      const promise = new myPromise((resolve) => {
+        assert.isFalse(called.calledWith('zch'))
+        resolve('zch')
+        setTimeout(() => {
+          assert(called.calledWith('zch'))
+          done()
+        })
+      })
+      promise.then(called)
+    })
+    it('2.2.2.3 它最多被调用一次', (done) => {
+      const called = sinon.fake()
+      const promise = new myPromise((resolve) => {
+        resolve('zch1')
+        resolve('zch2')
+        setTimeout(() => {
+          assert(called.calledOnce)
+          assert(called.calledWith('zch1'))
+          done()
+        })
+      })
+      promise.then(called)
+    })
   })
   describe('2.2.3 如果 onRejected 是一个函数', () => {
-    it('它一定在 promise 是 rejected 状态后调用，并且接受一个参数 reason', (done) => {
+    it('2.2.3.1 它一定在 promise 是 rejected 状态后调用，并且接受一个参数 reason', (done) => {
       const called = sinon.fake()
       const promise = new myPromise((resolve, reject) => {
         assert.isFalse(called.calledWith('zch'))
         reject('zch')
         setTimeout(() => {
           assert(called.calledWith('zch'))
+          done()
+        })
+      })
+      promise.then(null, called)
+    })
+    it('2.2.3.2 它一定在 promise 是 rejected 状态后调用', (done) => {
+      const called = sinon.fake()
+      const promise = new myPromise((resolve, reject) => {
+        assert.isFalse(called.calledWith('zch'))
+        reject('zch')
+        setTimeout(() => {
+          assert(called.calledWith('zch'))
+          done()
+        })
+      })
+      promise.then(null, called)
+    })
+    it('2.2.2.3 它最多被调用一次', (done) => {
+      const called = sinon.fake()
+      const promise = new myPromise((resolve, reject) => {
+        reject('zch1')
+        reject('zch2')
+        setTimeout(() => {
+          assert(called.calledOnce)
+          assert(called.calledWith('zch1'))
           done()
         })
       })
@@ -163,6 +213,23 @@ describe('myPromise', () => {
       const promise = new myPromise((resolve, reject) => reject())
       promise.then(null, function () {
         assert.isUndefined(this)
+        done()
+      })
+    })
+  })
+  describe('2.2.6 在同一个 promise 实例中，then 可以链式调用多次', () => {
+    it('2.2.6.1 如果或当 promise 转态是 fulfilled 时，所有的 onFulfilled 回调回以他们注册时的顺序依次执行', (done) => {
+      const called1 = sinon.fake()
+      const called2 = sinon.fake()
+      const called3 = sinon.fake()
+      const promise = new myPromise((resolve) => resolve('zch'))
+      promise.then(called1)
+      promise.then(called2)
+      promise.then(called3)
+      setTimeout(() => {
+        assert(called1.called)
+        assert(called2.called)
+        assert(called3.called)
         done()
       })
     })

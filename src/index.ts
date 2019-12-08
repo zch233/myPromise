@@ -17,23 +17,25 @@ myPromise.prototype.then = function (success?: Function, fail?: Function) {
   }
 }
 
-myPromise.prototype.resolve = function (data: any) {
+myPromise.prototype.resolve = function (value: any) {
   setTimeout(() => {
+    if (this.status !== 'pending') return
     this.status = 'fulfilled'
     this.events.map((fn: [Function, Function]) => {
       if (isFunction(fn[0])) {
-        fn[0].call(undefined, data)
+        fn[0].call(undefined, value)
       }
     })
   })
 }
 
-myPromise.prototype.reject = function (data: any) {
+myPromise.prototype.reject = function (reason: any) {
   setTimeout(() => {
+    if (this.status !== 'pending') return
     this.status = 'rejected'
     this.events.map((fn: [Function, Function]) => {
       if (isFunction(fn[1])) {
-        fn[1].call(undefined, data)
+        fn[1].call(undefined, reason)
       }
     })
   })
