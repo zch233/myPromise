@@ -61,12 +61,26 @@ describe('myPromise', () => {
     })
     promise.then(null, called)
   })
-  it('resolve 可以给 success 传值', () => {
+  it('resolve 可以给 success 传值', (done) => {
+    const called = sinon.fake()
     const promise = new myPromise((resolve: Function) => {
       resolve('zch')
+      setTimeout(() => {
+        assert(called.calledWith('zch'))
+        done()
+      })
     })
-    promise.then((data) => {
-      assert(data === 'zch')
+    promise.then(called)
+  })
+  it('reject 可以给 fail 传值', (done) => {
+    const called = sinon.fake()
+    const promise = new myPromise((resolve: Function, reject: Function) => {
+      reject('zch')
+      setTimeout(() => {
+        assert(called.calledWith('zch'))
+        done()
+      })
     })
+    promise.then(null, called)
   })
 })
