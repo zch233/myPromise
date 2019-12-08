@@ -9,18 +9,18 @@ function isFunction(fn:any) {
   return true
 }
 
-myPromise.prototype.then = function (success: Function, fail: Function) {
+myPromise.prototype.then = function (success?: Function, fail?: Function) {
   this.events.push([success, fail])
 }
 
-myPromise.prototype.resolve = function () {
+myPromise.prototype.resolve = function (data: any) {
   setTimeout(() => {
-    this.events.map((fn: [Function, Function]) => fn[0].call(undefined))
+    this.events.map((fn: [Function, Function]) => fn[0].call(undefined, data))
   })
 }
 
-myPromise.prototype.reject = function () {
+myPromise.prototype.reject = function (data: any) {
   setTimeout(() => {
-    this.events.map((fn: [Function, Function]) => fn[1].call(undefined))
+    this.events.map((fn: [Function, Function]) => fn[1].call(undefined, data))
   })
 }

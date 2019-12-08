@@ -50,4 +50,23 @@ describe('myPromise', () => {
     })
     promise.then(called)
   })
+  it('执行 reject 以后会执行 then 里的 fail 函数', (done) => {
+    const called = sinon.fake()
+    const promise = new myPromise((resolve: Function, reject: Function) => {
+      reject()
+      setTimeout(() => {
+        assert(called)
+        done()
+      })
+    })
+    promise.then(null, called)
+  })
+  it('resolve 可以给 success 传值', () => {
+    const promise = new myPromise((resolve: Function) => {
+      resolve('zch')
+    })
+    promise.then((data) => {
+      assert(data === 'zch')
+    })
+  })
 })
