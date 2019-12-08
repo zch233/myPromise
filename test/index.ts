@@ -6,7 +6,6 @@ import myPromise from '../src'
 chai.use(sinonChai)
 
 const assert = chai.assert
-
 describe('myPromise', () => {
   it('是一个函数', () => {
     assert.isFunction(myPromise)
@@ -148,6 +147,22 @@ describe('myPromise', () => {
       assert.isFalse(called.calledWith('zch'))
       setTimeout(() => {
         assert(called.calledWith('zch'))
+        done()
+      })
+    })
+  })
+  describe('2.2.5 onFulfilled 和 onRejected 会作为函数形式调用 (也就是说，默认 this 指向 global，严格模式 undefined)', () => {
+    it('then 的 success 中的 this 指向 undefined', (done) => {
+      const promise = new myPromise((resolve) => resolve())
+      promise.then(function () {
+        assert.isUndefined(this)
+        done()
+      })
+    })
+    it('then 的 fail 中的 this 指向 undefined', (done) => {
+      const promise = new myPromise((resolve, reject) => reject())
+      promise.then(null, function () {
+        assert.isUndefined(this)
         done()
       })
     })

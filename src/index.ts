@@ -20,13 +20,21 @@ myPromise.prototype.then = function (success?: Function, fail?: Function) {
 myPromise.prototype.resolve = function (data: any) {
   setTimeout(() => {
     this.status = 'fulfilled'
-    this.events.map((fn: [Function, Function]) => fn[0].call(undefined, data))
+    this.events.map((fn: [Function, Function]) => {
+      if (isFunction(fn[0])) {
+        fn[0].call(undefined, data)
+      }
+    })
   })
 }
 
 myPromise.prototype.reject = function (data: any) {
   setTimeout(() => {
     this.status = 'rejected'
-    this.events.map((fn: [Function, Function]) => fn[1].call(undefined, data))
+    this.events.map((fn: [Function, Function]) => {
+      if (isFunction(fn[1])) {
+        fn[1].call(undefined, data)
+      }
+    })
   })
 }
