@@ -83,4 +83,5 @@ describe('myPromise', () => {
     })
     promise.then(null, called)
   })
+  xit('一个 promise 有且只有一个状态（pending，fulfilled，rejected 其中之一）', () => {})
 })
