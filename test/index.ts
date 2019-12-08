@@ -84,4 +84,46 @@ describe('myPromise', () => {
     promise.then(null, called)
   })
   xit('一个 promise 有且只有一个状态（pending，fulfilled，rejected 其中之一）', () => {})
+  describe('2.2.1 onFulfilled 和 onRejected 都是可选参数', () => {
+    it('2.2.1.1 如果 onFulfilled 不是函数，它会被忽略', () => {
+      const promise = new myPromise((resolve) => resolve())
+      assert.doesNotThrow(() => {
+        promise.then()
+      })
+    })
+    it('2.2.1.1 如果 onFulfilled 不是函数，它会被忽略', () => {
+      const promise = new myPromise((resolve, reject) => reject())
+      assert.doesNotThrow(() => {
+        promise.then(null, 2333)
+      })
+    })
+  })
+  describe('2.2.2 如果 onFulfilled 是一个函数', () => {
+    it('2.2.2.1 它一定是在 promise 是 fulfilled 状态后调用，并且接受一个参数 value', (done) => {
+      const called = sinon.fake()
+      const promise = new myPromise((resolve) => {
+        assert.isFalse(called.calledWith('zch'))
+        resolve('zch')
+        setTimeout(() => {
+          assert(called.calledWith('zch'))
+          done()
+        })
+      })
+      promise.then(called)
+    })
+  })
+  describe('2.2.3 如果 onRejected 是一个函数', () => {
+    it('它一定在 promise 是 rejected 状态后调用，并且接受一个参数 reason', (done) => {
+      const called = sinon.fake()
+      const promise = new myPromise((resolve, reject) => {
+        assert.isFalse(called.calledWith('zch'))
+        reject('zch')
+        setTimeout(() => {
+          assert(called.calledWith('zch'))
+          done()
+        })
+      })
+      promise.then(null, called)
+    })
+  })
 })
