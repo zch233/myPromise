@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import * as sinon from 'sinon'
+import sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import myPromise from '../src'
 
@@ -43,7 +43,8 @@ describe('myPromise', () => {
     const called = sinon.fake()
     const promise = new myPromise((resolve) => {
       resolve()
+      assert(called)
     })
-    promise.then(called)
+    promise.then()
   })
 })
