@@ -126,4 +126,30 @@ describe('myPromise', () => {
       promise.then(null, called)
     })
   })
+  describe('2.2.4 onFulfilled 或 onRejected 只在执行环境堆栈只包含平台代码之后调用 [3.1]', () => {
+    it('即：在我的代码执行完之前，不能调用 then 后面的 success 函数', (done) => {
+      const called = sinon.fake()
+      const promise = new myPromise((resolve) => {
+        resolve('zch')
+      })
+      promise.then(called)
+      assert.isFalse(called.calledWith('zch'))
+      setTimeout(() => {
+        assert(called.calledWith('zch'))
+        done()
+      })
+    })
+    it('即：在我的代码执行完之前，不能调用 then 后面的 fail 函数', (done) => {
+      const called = sinon.fake()
+      const promise = new myPromise((resolve, reject) => {
+        reject('zch')
+      })
+      promise.then(null, called)
+      assert.isFalse(called.calledWith('zch'))
+      setTimeout(() => {
+        assert(called.calledWith('zch'))
+        done()
+      })
+    })
+  })
 })
