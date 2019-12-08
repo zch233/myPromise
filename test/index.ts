@@ -34,14 +34,14 @@ describe('myPromise', () => {
     assert.isFunction(promise.then)
   })
   it('接受的函数有两个参数，分别是 resolve 和 reject', () => {
-    new myPromise((resolve, reject) => {
+    new myPromise((resolve: Function, reject: Function) => {
       assert.isFunction(resolve)
       assert.isFunction(reject)
     })
   })
   it('执行 resolve 以后会执行 then 里的人success 函数', () => {
     const called = sinon.fake()
-    const promise = new myPromise((resolve) => {
+    const promise = new myPromise((resolve: Function) => {
       resolve()
       assert(called)
     })
