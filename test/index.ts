@@ -82,7 +82,27 @@ describe('myPromise', () => {
     })
     promise.then(null, called)
   })
-  it('一个 promise 有且只有一个状态（pending，fulfilled，rejected 其中之一）', () => {})
+  it('一个 promise 有且只有一个状态（pending，fulfilled，rejected 其中之一）', (done) => {
+    const promisePending = new myPromise(() => {})
+    const promiseFulfilled = new myPromise((resolve) => {
+      resolve()
+    })
+    const promiseRejected = new myPromise((resolve, reject) => {
+      reject()
+    })
+    assert(promisePending.status === 'pending')
+    assert(promiseFulfilled.status === 'pending')
+    assert(promiseFulfilled.status !== 'fulfilled')
+    assert(promiseFulfilled.status !== 'rejected')
+    assert(promiseRejected.status === 'pending')
+    assert(promiseRejected.status !== 'fulfilled')
+    assert(promiseRejected.status !== 'rejected')
+    setTimeout(() => {
+      assert(promiseFulfilled.status === 'fulfilled')
+      assert(promiseRejected.status === 'rejected')
+      done()
+    })
+  })
   describe('2.2.1 onFulfilled 和 onRejected 都是可选参数', () => {
     it('2.2.1.1 如果 onFulfilled 不是函数，它会被忽略', () => {
       const promise = new myPromise((resolve) => resolve())
