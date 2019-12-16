@@ -273,4 +273,13 @@ describe('myPromise', () => {
       })
     })
   })
+  describe('2.2.7', () => {
+    it('then 方法一定返回一个 promise', () => {
+      const promise = new myPromise((resolve) => {
+        resolve()
+      })
+      const promise2 = promise.then()
+      assert(promise2 instanceof myPromise)
+    })
+  })
 })

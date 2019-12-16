@@ -15,6 +15,7 @@ myPromise.prototype.then = function (success?: Function, fail?: Function) {
   if (isFunction(success) || isFunction(fail)) {
     this.events.push([success, fail])
   }
+  return new myPromise(() => {})
 }
 
 myPromise.prototype.resolve = function (value: any) {
