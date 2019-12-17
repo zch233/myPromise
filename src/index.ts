@@ -44,8 +44,13 @@ myPromise.prototype.resolve = function (value) {
     this.status = 'fulfilled'
     this.events.map((fn) => {
       if (isFunction(fn[0])) {
-        const x = fn[0].call(undefined, value)
-        fn[2].resolveWith(x)
+        let x
+        try {
+          x = fn[0].call(undefined, value)
+          fn[2].resolveWith(x)
+        } catch(err) {
+          fn[2].reject(err)
+        }
       }
     })
   })
@@ -57,8 +62,13 @@ myPromise.prototype.reject = function (reason) {
     this.status = 'rejected'
     this.events.map((fn) => {
       if (isFunction(fn[1])) {
-        const x = fn[1].call(undefined, reason)
-        fn[2].resolveWith(x)
+        let x
+        try {
+          x = fn[1].call(undefined, reason)
+          fn[2].resolveWith(x)
+        } catch (err) {
+          fn[2].reject(err)
+        }
       }
     })
   })

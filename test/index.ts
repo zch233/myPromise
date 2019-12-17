@@ -311,5 +311,19 @@ describe('myPromise', () => {
         done()
       })
     })
+    it('2.2.7.1.4 的第一个promise的then抛出错误，下一个then必须调用fail', (done) => {
+      const promise = new myPromise((resolve) => resolve())
+      const error = new Error('错误')
+      const x = promise.then(() => {
+        throw error
+      })
+      const called = sinon.fake()
+      x.then(null, called)
+      setTimeout(() => {
+        assert(called.called)
+        assert(called.calledWith(error))
+        done()
+      })
+    })
   })
 })
