@@ -281,5 +281,35 @@ describe('myPromise', () => {
       const promise2 = promise.then()
       assert(promise2 instanceof myPromise)
     })
+    it('2.2.7.1. 如果 onFulfilled 或 onRejected 函数返回值为x，那么执行Promise处理过程 [[Resolve]](promise2, x) ', () => {
+      const promise1 = new myPromise((resolve) => {resolve()})
+      promise1.then(() => 'zch').then((result) => {
+        assert(result === 'zch')
+      })
+      const promise2 = new myPromise((resolve, reject) => {reject()})
+      promise2.then(null, () => 'zch').then((result) => {
+        assert(result === 'zch')
+      })
+    })
+    it('2.2.7.1.2 success 的返回值是一个 promise 实例且成功了，', (done) => {
+      const promise = new myPromise((resolve) => resolve())
+      const x = promise.then(() => new myPromise((resolve) => resolve()))
+      const called = sinon.fake()
+      x.then(called)
+      setTimeout(() => {
+        assert(called.called)
+        done()
+      })
+    })
+    it('2.2.7.1.3 fail 的返回值是一个 promise 实例且失败了', (done) => {
+      const promise = new myPromise((resolve, reject) => reject())
+      const x = promise.then(null, () => new myPromise((resolve) => resolve()))
+      const called = sinon.fake()
+      x.then(called)
+      setTimeout(() => {
+        assert(called.called)
+        done()
+      })
+    })
   })
 })

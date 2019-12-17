@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @type/sinon @types/sinon-chai
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @type/node
 
 PATH: 
   C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\52974\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\nodejs;C:\Program Files\MacType;C:\Program Files\TortoiseGit\bin;C:\Program Files (x86)\Yarn\bin;C:\Users\52974\AppData\Local\Microsoft\WindowsApps;D:\Users\52974\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\52974\AppData\Roaming\npm;C:\Users\52974\AppData\Local\BypassRuntm;C:\Users\52974\AppData\Local\Yarn\bin
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.npm.taobao.org/@type%2fsinon: Not found
+  Error: https://registry.npm.taobao.org/@type%2fnode: Not found
       at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66035:18)
       at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140564:22)
       at Request.emit (events.js:198:13)
@@ -47,7 +47,9 @@ npm manifest:
     },
     "devDependencies": {
       "@types/chai": "^4.2.6",
-      "@types/mocha": "^5.2.7"
+      "@types/mocha": "^5.2.7",
+      "@types/sinon": "^7.5.1",
+      "@types/sinon-chai": "^3.2.3"
     }
   }
 
@@ -88,7 +90,7 @@ Lockfile:
     resolved "https://registry.npm.taobao.org/@sinonjs/text-encoding/download/@sinonjs/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
     integrity sha1-jaXGUwkVZT86Hzj9XxAdjD+AecU=
   
-  "@types/chai@^4.2.6":
+  "@types/chai@*", "@types/chai@^4.2.6":
     version "4.2.6"
     resolved "https://registry.npm.taobao.org/@types/chai/download/@types/chai-4.2.6.tgz#a55625d151d9c7c7a0a95920632131d66480bce9"
     integrity sha1-pVYl0VHZx8egqVkgYyEx1mSAvOk=
@@ -97,6 +99,19 @@ Lockfile:
     version "5.2.7"
     resolved "https://registry.npm.taobao.org/@types/mocha/download/@types/mocha-5.2.7.tgz#315d570ccb56c53452ff8638738df60726d5b6ea"
     integrity sha1-MV1XDMtWxTRS/4Y4c432BybVtuo=
+  
+  "@types/sinon-chai@^3.2.3":
+    version "3.2.3"
+    resolved "https://registry.npm.taobao.org/@types/sinon-chai/download/@types/sinon-chai-3.2.3.tgz#afe392303dda95cc8069685d1e537ff434fa506e"
+    integrity sha1-r+OSMD3alcyAaWhdHlN/9DT6UG4=
+    dependencies:
+      "@types/chai" "*"
+      "@types/sinon" "*"
+  
+  "@types/sinon@*", "@types/sinon@^7.5.1":
+    version "7.5.1"
+    resolved "https://registry.npm.taobao.org/@types/sinon/download/@types/sinon-7.5.1.tgz#d27b81af0d1cfe1f9b24eebe7a24f74ae40f5b7c"
+    integrity sha1-0nuBrw0c/h+bJO6+eiT3SuQPW3w=
   
   ansi-colors@3.2.3:
     version "3.2.3"
