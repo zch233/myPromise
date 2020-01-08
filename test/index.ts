@@ -281,7 +281,7 @@ describe('myPromise', () => {
       const promise2 = promise.then()
       assert(promise2 instanceof myPromise)
     })
-    it('2.2.7.1. 如果 onFulfilled 或 onRejected 函数返回值为x，那么执行Promise处理过程 [[Resolve]](promise2, x) ', () => {
+    it('2.2.7.1.1 如果 onFulfilled 或 onRejected 函数返回值为x，那么执行Promise处理过程 [[Resolve]](promise2, x) ', () => {
       const promise1 = new myPromise((resolve) => {resolve()})
       promise1.then(() => 'zch').then((result) => {
         assert(result === 'zch')
@@ -311,7 +311,7 @@ describe('myPromise', () => {
         done()
       })
     })
-    it('2.2.7.1.4 的第一个promise的 success then抛出错误，下一个then必须调用fail', (done) => {
+    it('2.2.7.2.1 的第一个promise的 success then抛出错误，下一个then必须调用fail', (done) => {
       const promise = new myPromise((resolve) => resolve())
       const error = new Error('错误')
       const x = promise.then(() => {
@@ -325,10 +325,10 @@ describe('myPromise', () => {
         done()
       })
     })
-    it('2.2.7.1.5 的第一个promise的 fail then抛出错误，下一个then必须调用fail', (done) => {
+    it('2.2.7.2.2 的第一个promise的 fail then抛出错误，下一个then必须调用fail', (done) => {
       const promise = new myPromise((resolve, reject) => reject())
       const error = new Error('错误')
-      const x = promise.then(null, () => {
+      const x = promise.then(null, () => { 
         throw error
       })
       const called = sinon.fake()
